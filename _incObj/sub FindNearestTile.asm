@@ -23,7 +23,21 @@ FindNearestTile:			; XREF: FindFloor; et al
 		add.w	d1,d0		; combine
 
 	if ChunksInROM=1	;Mercury Chunks In ROM
+		cmpi.b	#id_SYZ,(v_zone).w	; is level SYZ?
+		beq.s	@isSYZ	; if yes, branch
 		moveq	#0,d1
+		bsr.s	@locatetile
+		movea.l	d1,a1
+		rts
+		
+	@isSYZ:
+		moveq	#-1,d1
+		sub.l	#$FF0000,d1
+		bsr.s	@locatetile
+		movea.l	d1,a1
+		rts
+		
+@locatetile:
 	else
 		moveq	#-1,d1
 	endc	;Chunks In ROM
